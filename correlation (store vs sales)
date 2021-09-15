@@ -1,12 +1,22 @@
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+
 df_store = pd.read_csv("/kaggle/input/retaildataset/stores data-set.csv")
 df_feature = pd.read_csv("/kaggle/input/retaildataset/Features data set.csv",parse_dates=["Date"])
 df_sales = pd.read_csv("/kaggle/input/retaildataset/sales data-set.csv",parse_dates=["Date"])
 print(df_store.info())
 print(df_store.head())
+
 print(df_feature.info())
 print(df_feature.head())
+
 print(df_sales.info())
 print(df_sales.head())
+
 data_date = df_feature.groupby("Date").agg({"CPI":"mean"
                                             ,"Unemployment":"mean"
                                             ,"IsHoliday":"sum"
@@ -26,7 +36,7 @@ print(data.describe())
 plt.style.use('fivethirtyeight')
 #plt.figure(figsize=(15,4))
 fig, ax = plt.subplots(5,1,figsize=(15,10),sharex=True) 
-data["Weekly_Sales"].plot(ax=ax[0],title="Weekly Sales/sales on Holiday")
+data["Weekly_Sales"].plot(ax=ax[0],title="Weekly Sales_Holiday")
 data[data.IsHoliday==True]["Weekly_Sales"].plot(marker="D",ax=ax[0],legend="Holiday Week sale")
 data["Temperature"].plot(ax=ax[1], title="Temperature")
 data["Fuel_Price"].plot(ax=ax[2],title="Fuel_Price")
@@ -37,7 +47,6 @@ data["Unemployment"].plot(ax=ax[4],title="Unemployment")
 
 
 data_Store = df_feature.groupby("Store").agg({"Temperature":"mean","Fuel_Price":"mean","IsHoliday":"sum"})
-
 temp_store = df_sales.groupby("Store").agg({"Weekly_Sales":"sum"})
 temp_store.Weekly_Sales = temp_store.Weekly_Sales/1000000
 temp_store.Weekly_Sales = temp_store.Weekly_Sales.apply(int)
@@ -48,9 +57,9 @@ df_store["holiday"] = data_Store.IsHoliday
 df_store["Weekly_Sales"] = temp_store.Weekly_Sales
 
 df_store.describe()
+
 fig,ax = plt.subplots(1,3,figsize=(20, 6))
 sns.countplot(df_store.Type,ax=ax[0])
 sns.boxplot(data = df_store,y="Weekly_Sales",x="Type",ax=ax[1])
-
 sns.swarmplot(data = df_store,y="Size",x="Type",ax=ax[2])
 
