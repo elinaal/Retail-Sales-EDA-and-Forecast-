@@ -58,6 +58,7 @@ df_store["Weekly_Sales"] = temp_store.Weekly_Sales
 
 df_store.describe()
 
+
 fig,ax = plt.subplots(1,3,figsize=(20, 6))
 sns.countplot(df_store.Type,ax=ax[0])
 sns.boxplot(data = df_store,y="Weekly_Sales",x="Type",ax=ax[1])
