@@ -17,6 +17,7 @@ print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
 model.plot(forecast)
 plt.show()
 
+
 dates = pd.date_range("20111126","20121110", freq='W')
 dates = [pd.to_datetime(i) for i in dates]
 dates_for_forecast = pd.DataFrame([dt.datetime.strftime(i, '%Y-%m-%d') for i in dates],  columns=['ds'])
